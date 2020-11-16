@@ -17,54 +17,17 @@ import java.util.*;
  * градусов
  */
 public class FireProtectService {
-    private static final int DEFAULT_TEMPERATURE = 20;
-    private static final int CRITICAL_TEMPERATURE = 80;
 
-    private final Set<FireDepartment> fireDepartments;
-    private final Map<String, Device> devices;
-
-    public FireProtectService(Set<FireDepartment> fireDepartments, Map<String, Device> devices) {
-        this.fireDepartments = fireDepartments;
-        this.devices = devices;
+    public void changeState(String deviceId, State state) {
 
     }
 
-    public synchronized void changeState(String deviceId, State state) {
-        if (this.devices.containsKey(deviceId)) {
-            this.devices.get(deviceId).setState(state);
+    public void processTemperatureEvent(String deviceId, int temperatureDiff) {
 
-            return;
-        }
-
-        this.devices.put(deviceId, new Device(deviceId, state, DEFAULT_TEMPERATURE));
     }
 
-    public synchronized void processTemperatureEvent(String deviceId, int temperatureDiff) {
-        Device device = this.devices.get(deviceId);
+    public int getDeviceTemperature(String deviceId) {
 
-        if (device == null) { //не уверен, что это правильно
-            this.devices.put(deviceId, new Device(deviceId, State.DISARMING, DEFAULT_TEMPERATURE + temperatureDiff));
-
-            return;
-        }
-
-        int resultTemperature = device.getTemperature() + temperatureDiff;
-
-        if (resultTemperature >= CRITICAL_TEMPERATURE || temperatureDiff == DEFAULT_TEMPERATURE) {
-            if (device.getState().equals(State.ARMING)) {
-                this.notifyFireDepartments(deviceId);
-            }
-        }
-    }
-
-    public int getDeviceTemperature(String deviceId) { //not sure we need this method, with class Device
-        Device device = this.devices.get(deviceId);
-
-        if (device == null) {
-            return 0;
-        }
-
-        return device.getTemperature();
     }
 
     /**
@@ -73,7 +36,6 @@ public class FireProtectService {
      */
 
     public void registerFireDepartment(FireDepartment fireDepartment) {
-        this.fireDepartments.add(fireDepartment);
     }
 
     /**
@@ -81,7 +43,6 @@ public class FireProtectService {
      * @param deviceId
      */
     public void notifyFireDepartments(final String deviceId) {
-        this.fireDepartments.parallelStream()
-                            .forEach((fireDepartment) -> fireDepartment.alarm(deviceId));
+
     }
 }
