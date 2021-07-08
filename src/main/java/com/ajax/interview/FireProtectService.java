@@ -1,48 +1,39 @@
 package com.ajax.interview;
 
-import java.util.*;
-
 /**
- * Есть датчик температуры, который может быть в состоянии arming/disarming
- * @see State
- * Это состояние может меняться вызовом метода changeState
- * В метод processTemperatureEvent приходит изменение температуры для устройства с id
- * При изменении температуры
- * Сервис должен вызывать пожарную службу если
- * датчик в соятоянии arming и
+ * <p>Функциональные требования:</p>
+ * Есть датчик температуры, который может быть в состоянии armed/disarmed.
+ * Это состояние может меняться вызовом метода changeState.
+ * В метод changeTemperature приходит изменение температуры для устройства с id.
+ * При изменении температуры сервис должен вызывать пожарную службу если
  * температура повышается больше чем на 20 градусов или текущая температура в помещении больше 80
+ * но только если датчик в состоянии armed.
  *
+ * Когда по устройству первый раз приходит какое-то уведомление,
+ * то считается, что он в состоянии disarmed и температура в помещении 20 градусов.
  *
- * Когда по устройству первый раз приходит какое-то уведомление, то считается что он в состоянии disarming и температура в помещении 20
- * градусов
+ * <p>Нефункциональные требования:</p>
+ * Считаем, что реализация этого интерфейса будет singletone-бином (реализацию singletone делать не нужно) который
+ * обрабатывает сигналы от всех датчиков в системе (десятки или сотни тысяч). В связи с чем реализация должна корректно
+ * работать в многопоточном режиме, учитывая что разные методы могут быть вызваны одновременно с разных потоков.
+ *
+ * Также, нужно написать юнит тесты, которые:
+ * 1) Проверят функциональные требования
+ * 2) Проверят нефункциональные требования. Конкретно - правильность работы в многопоточном режиме.
+ *
  */
-public class FireProtectService {
+public interface FireProtectService {
 
-    public void changeState(String deviceId, State state) {
+    void changeState(String deviceId, State state);
 
-    }
+    void changeTemperature(String deviceId, int temperatureDiff);
 
-    public void processTemperatureEvent(String deviceId, int temperatureDiff) {
+    int getState(String deviceId);
 
-    }
-
-    public int getDeviceTemperature(String deviceId) {
-
-    }
+    int getTemperature(String deviceId);
 
     /**
-     * Зарегистрировать пожарную службу, которая хочет получать уведомления о пожарной тревоге
-     * @param fireDepartment
+     * Регистрирует пожарную службу, которая хочет получать уведомления о пожарной тревоге
      */
-
-    public void registerFireDepartment(FireDepartment fireDepartment) {
-    }
-
-    /**
-     * Оповестить все службы о пожарной тревоге
-     * @param deviceId
-     */
-    public void notifyFireDepartments(final String deviceId) {
-
-    }
+    void registerFireDepartment(FireDepartment fireDepartment);
 }
