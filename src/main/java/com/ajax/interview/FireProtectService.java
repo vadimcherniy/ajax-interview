@@ -48,11 +48,11 @@ public interface FireProtectService {
 
     void changeState(String deviceId, State state);
 
-    void changeTemperature(String deviceId, int temperatureDiff);
+    void changeTemperature(String deviceId, short temperatureDiff);
 
-    int getState(String deviceId);
+    State getState(String deviceId);
 
-    int getTemperature(String deviceId);
+    short getTemperature(String deviceId);
 
     void registerFireDepartment(FireDepartment fireDepartment);
 }
