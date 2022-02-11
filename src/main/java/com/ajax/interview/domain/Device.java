@@ -1,6 +1,5 @@
 package com.ajax.interview.domain;
 
-import com.ajax.interview.State;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
