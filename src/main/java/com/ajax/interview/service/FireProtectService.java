@@ -1,4 +1,6 @@
-package com.ajax.interview;
+package com.ajax.interview.service;
+
+import com.ajax.interview.State;
 
 /**
  * <p> Functional requirements: </p>
